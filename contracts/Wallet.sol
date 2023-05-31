@@ -5,12 +5,12 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Wallet {
     address private _router;
-    IERC20 private _token1;
-    IERC20 private _token2;
+    address private _token0;
+    address private _token1;
 
-    constructor(address router, address token1, address token2) {
+    constructor(address router, address token0, address token1) {
         _router = router;
-        _token1 = IERC20(token1);
-        _token2 = IERC20(token2);
+        _token0 = token0;
+        _token1 = token1;
     }
 }
