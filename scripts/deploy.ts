@@ -1,15 +1,47 @@
+
+import UniswapV2FactoryAbi from "@sushiswap/core/build/abi/UniswapV2Factory.json"
+import { UniswapV2FactoryByteCode } from '../utils/bytecodes/UniswapV2FactoryByteCode';
+import { UniswapV2Router02ByteCode } from '../utils/bytecodes/UniswapV2Router02ByteCode';
+import WETH9Abi from "@sushiswap/core/build/abi//WETH9Mock.json"
+import { WETH9ByteCode } from '../utils/bytecodes/WETH9ByteCode';
+import UniswapV2Router02Abi from "@sushiswap/core/build/abi/UniswapV2Router02.json"
 import { ethers } from "hardhat";
 
 async function main() {
 
-  const Wallet = await ethers.getContractFactory("Wallet");
-  const wallet = await Wallet.deploy();
+    const [deployer] = await ethers.getSigners();
 
-  await wallet.deployed();
+    console.log(``)
+    console.log(`Deploying UniswapV2Factory`)
 
-  console.log(
-    `Wallet deployed to ${wallet.address}`
-  );
+    const UniswapFactory = await ethers.getContractFactory(UniswapV2FactoryAbi, UniswapV2FactoryByteCode, deployer)
+    const uniswapFactory = await UniswapFactory.deploy(deployer.address);
+
+    console.log(` - UniswapV2Factory deployed at ${uniswapFactory.address}`)
+
+    console.log(``)
+    console.log(`Deploying WETH9`)
+
+    const WETH9 = await new ethers.ContractFactory(WETH9Abi, WETH9ByteCode, deployer).deploy();
+
+    console.log(` - WETH9 deployed at ${WETH9.address}`)
+
+    console.log(``)
+    console.log(`Deploying UniswapV2Router02`)
+
+    const UniswapV2Router = await ethers.getContractFactory(UniswapV2Router02Abi, UniswapV2Router02ByteCode, deployer)
+    const uniswapV2Router = await UniswapV2Router.deploy(uniswapFactory.address, WETH9.address);
+
+    console.log(` - UniswapV2Router02 deployed at ${uniswapV2Router.address}`)
+
+    console.log(``)
+    console.log(`Deploying Wallet`)
+
+    const Wallet = await ethers.getContractFactory("Wallet")
+    const wallet = await Wallet.deploy(uniswapV2Router.address, WETH9.address , WETH9.address);
+
+    console.log(` - Wallet deployed at ${wallet.address}`)
+
 }
 
 main().catch((error) => {
