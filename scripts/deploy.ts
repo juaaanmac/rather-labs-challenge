@@ -42,7 +42,7 @@ async function main() {
     const ERC20MockB = await ERC20Mock.deploy("ERC20MockB","MOCB", ethers.BigNumber.from("5000000000000000000"));
 
     const Wallet = await ethers.getContractFactory("Wallet")
-    const wallet = await Wallet.deploy(uniswapV2Router.address, ERC20MockA.address , ERC20MockB.address);
+    const wallet = await Wallet.deploy(uniswapV2Router.address, uniswapV2Router.address);
 
     console.log(` - Wallet deployed at ${wallet.address}`)
 
