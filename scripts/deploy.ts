@@ -37,8 +37,12 @@ async function main() {
     console.log(``)
     console.log(`Deploying Wallet`)
 
+    const ERC20Mock = await ethers.getContractFactory("ERC20Mock")
+    const ERC20MockA = await ERC20Mock.deploy("ERC20MockA","MOCA", ethers.BigNumber.from("5000000000000000000"));
+    const ERC20MockB = await ERC20Mock.deploy("ERC20MockB","MOCB", ethers.BigNumber.from("5000000000000000000"));
+
     const Wallet = await ethers.getContractFactory("Wallet")
-    const wallet = await Wallet.deploy(uniswapV2Router.address, WETH9.address , WETH9.address);
+    const wallet = await Wallet.deploy(uniswapV2Router.address, ERC20MockA.address , ERC20MockB.address);
 
     console.log(` - Wallet deployed at ${wallet.address}`)
 
