@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@sushiswap/core/contracts/uniswapv2/interfaces/IUniswapV2Router02.sol";
-import "hardhat/console.sol";
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import '@sushiswap/core/contracts/uniswapv2/interfaces/IUniswapV2Router02.sol';
+import '../interfaces/IMasterChef.sol';
+import 'hardhat/console.sol';
 
 contract Wallet {
     address public router;
@@ -39,25 +40,29 @@ contract Wallet {
         address to,
         uint deadline
     ) external {
+        //Approve the SushiSwap router to use your tokens.
         IERC20(tokenA).transferFrom(msg.sender, address(this), amountADesired);
         IERC20(tokenA).approve(router, amountADesired);
 
         IERC20(tokenB).transferFrom(msg.sender, address(this), amountBDesired);
         IERC20(tokenB).approve(router, amountBDesired);
 
-        // Provide liquidity on SushiSwap
-        (uint amountA, uint amountB, uint liquidity) = IUniswapV2Router02(
-            router
-        ).addLiquidity(
-                tokenA,
-                tokenB,
-                amountADesired,
-                amountBDesired,
-                amountAMin,
-                amountBMin,
-                to,
-                deadline
-            );
+        //Provide liquidity on SushiSwap
+        (uint amountA, uint amountB, uint liquidity) = IUniswapV2Router02(router).addLiquidity(
+            tokenA,
+            tokenB,
+            amountADesired,
+            amountBDesired,
+            amountAMin,
+            amountBMin,
+            to,
+            deadline
+        );
 
+        //Approve the MasterChef smart contract to use your tokens
+        IERC20(tokenA).approve(masterChef, amountA);
+        IERC20(tokenB).approve(masterChef, amountB);
+
+        //IMasterChef(masterChef).deposit(x,liquidity);
     }
 }

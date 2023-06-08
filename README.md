@@ -1,13 +1,13 @@
-# Sample Hardhat Project
+# RATHER LABS CHALLENGE
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+RATHER LABS CHALLENGE
 
-Try running some of the following tasks:
+Honestly, I could not develop the challenge as I would have liked because when I downloaded the Sushiswap project from github, I received errors when installing the dependencies in the sushiswap and masterchef protocols, and I could not compile them. This made it difficult to generate the artifacts and I had to do things a bit messy, however I could not do it with the Masterchef contract.
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+#### Run tests
+
+`npm run test`
+
+#### Deploy contracts
+
+`npm run deploy`
